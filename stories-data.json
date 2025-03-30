@@ -1,50 +1,27 @@
 [
     {
-        "title": "القطة السوداء",
-        "author": "إدغار آلان بو",
-        "genre": ["رعب", "غموض"],
-        "link": "https://example.com/story1"
+        "title": "حكاية زينة",
+        "genre": ["تعليمية", "أخلاقية"],
+        "filename": "حكاية زينة.html"
     },
     {
-        "title": "الجريمة والعقاب",
-        "author": "فيودور دوستويفسكي",
-        "genre": ["دراما", "نفسي"],
-        "link": "https://example.com/story2"
+        "title": "التواصل والنملة",
+        "genre": ["مغامرات", "تعليمية"],
+        "filename": "التواصل والنملة.html"
     },
     {
-        "title": "الغريب",
-        "author": "ألبير كامو",
-        "genre": ["فلسفي", "دراما"],
-        "link": "https://example.com/story3"
+        "title": "ملك الغابة يذهب إلى الحرب",
+        "genre": ["مغامرات", "حكايات الحيوانات"],
+        "filename": "ملك الغابة يذهب إلى الحرب.html"
     },
     {
-        "title": "الاختفاء الغامض",
-        "author": "أجاثا كريستي",
-        "genre": ["غموض", "تحقيق"],
-        "link": "https://example.com/story4"
+        "title": "الطيور والبحر",
+        "genre": ["خيالية", "طبيعة"],
+        "filename": "الطيور والبحر.html"
     },
     {
-        "title": "الرجل الخفي",
-        "author": "هربرت جورج ويلز",
-        "genre": ["خيال علمي", "مغامرات"],
-        "link": "https://example.com/story5"
-    },
-    {
-        "title": "ليالي عربية",
-        "author": "مجهول",
-        "genre": ["فانتازيا", "مغامرات"],
-        "link": "https://example.com/story6"
-    },
-    {
-        "title": "القلعة الأخيرة",
-        "author": "فرانز كافكا",
-        "genre": ["فلسفي", "غموض"],
-        "link": "https://example.com/story7"
-    },
-    {
-        "title": "الرحلة إلى مركز الأرض",
-        "author": "جول فيرن",
-        "genre": ["مغامرات", "خيال علمي"],
-        "link": "https://example.com/story8"
+        "title": "أحكام قراقوش",
+        "genre": ["تاريخية", "فكاهية"],
+        "filename": "أحكام قراقوش.html"
     }
 ]
