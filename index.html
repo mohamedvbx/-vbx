@@ -289,74 +289,64 @@
             margin-left: 8px;
         }
 
-        /* Stories List */
+        /* Stories List - التصميم الجديد حسب طلبك */
         .stories-list {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
+            list-style: none;
             margin: 20px 0;
         }
 
         .story-item {
             background-color: var(--card-bg);
             border-radius: 8px;
-            padding: 15px;
+            padding: 12px 20px;
+            margin-bottom: 10px;
             box-shadow: var(--shadow);
             transition: var(--transition);
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
         }
 
         .story-item:hover {
-            transform: translateX(-5px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transform: translateX(-3px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         }
 
-        .story-info {
+        .story-main {
             flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
         }
 
         .story-title {
+            font-weight: bold;
             font-size: 16px;
-            font-weight: 600;
-            margin-bottom: 5px;
+            flex: 1;
         }
 
         .story-genre {
             font-size: 13px;
             color: var(--primary-color);
-            background-color: var(--search-bg);
-            padding: 3px 8px;
-            border-radius: 12px;
-            display: inline-block;
-        }
-
-        .story-link {
-            color: var(--primary-color);
-            text-decoration: none;
-            font-weight: 500;
-            display: flex;
-            align-items: center;
-            gap: 5px;
-            font-size: 14px;
-        }
-
-        .story-link:hover {
-            text-decoration: underline;
+            margin: 0 15px;
+            flex: 0.5;
+            text-align: center;
         }
 
         .favorite-btn {
-            background-color: transparent;
+            background: none;
             border: none;
+            font-size: 16px;
+            color: #ccc;
             cursor: pointer;
-            transition: var(--transition);
-            margin-right: 15px;
+            transition: all 0.3s;
+            flex: 0 0 30px;
+            text-align: right;
         }
 
-        .favorite-btn i {
+        .favorite-btn.active {
             color: var(--favorite-color);
-            font-size: 16px;
         }
 
         .favorite-btn:hover {
@@ -402,14 +392,14 @@
                 width: 200px;
             }
             
-            .story-item {
+            .story-main {
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 10px;
             }
             
-            .story-actions {
-                align-self: flex-end;
+            .story-genre {
+                margin: 5px 0;
+                text-align: right;
             }
         }
 
@@ -487,9 +477,9 @@
     </header>
 
     <div class="container">
-        <div class="stories-list" id="storiesList">
+        <ul class="stories-list" id="storiesList">
             <!-- سيتم ملء هذا القسم ديناميكيًا باستخدام JavaScript -->
-        </div>
+        </ul>
     </div>
 
     <footer>
@@ -525,8 +515,8 @@
                 
                 // التحقق من وجود الخصائص الأساسية في كل قصة
                 storiesData.forEach((story, index) => {
-                    if (!story.title || !story.author || !story.genre || !story.link) {
-                        throw new Error(`القصة في الفهرس ${index} يفتقد خصائص أساسية (title, author, genre, link)`);
+                    if (!story.title || !story.genre || !story.filename) {
+                        throw new Error(`القصة في الفهرس ${index} يفتقد خصائص أساسية (title, genre, filename)`);
                     }
                 });
                 
@@ -605,50 +595,53 @@
             }
             
             stories.forEach((story) => {
-                const isFavorite = favorites.some(fav => fav.title === story.title);
+                const isFavorite = favorites.some(fav => fav.filename === story.filename);
                 
-                const storyItem = document.createElement('div');
+                const storyItem = document.createElement('li');
                 storyItem.className = 'story-item';
-                
                 storyItem.innerHTML = `
-                    <div class="story-info">
+                    <div class="story-main">
                         <div class="story-title">${story.title}</div>
                         <div class="story-genre">${story.genre.join('، ')}</div>
-                    </div>
-                    <div class="story-actions">
-                        <button class="favorite-btn" data-story-title="${story.title}">
-                            <i class="${isFavorite ? 'fas' : 'far'} fa-heart"></i>
+                        <button class="favorite-btn ${isFavorite ? 'active' : ''}" data-filename="${story.filename}">
+                            <i class="fas fa-heart"></i>
                         </button>
-                        <a href="${story.link}" class="story-link" target="_blank">
-                            قراءة القصة <i class="fas fa-external-link-alt"></i>
-                        </a>
                     </div>
                 `;
+                
+                // عند النقر على القصة يتم الانتقال إليها مباشرة
+                storyItem.addEventListener('click', function(e) {
+                    if (!e.target.classList.contains('favorite-btn') && !e.target.closest('.favorite-btn')) {
+                        window.location.href = `stories/${story.filename}`;
+                    }
+                });
                 
                 storiesList.appendChild(storyItem);
             });
             
             // إضافة أحداث لأزرار المفضلة
             document.querySelectorAll('.favorite-btn').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const storyTitle = this.getAttribute('data-story-title');
-                    toggleFavorite(storyTitle);
+                btn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    const filename = this.getAttribute('data-filename');
+                    toggleFavorite(filename);
+                    this.classList.toggle('active');
                 });
             });
         }
 
         // تبديل حالة المفضلة
-        function toggleFavorite(storyTitle) {
-            const story = storiesData.find(s => s.title === storyTitle);
+        function toggleFavorite(filename) {
+            const story = storiesData.find(s => s.filename === filename);
             
-            const index = favorites.findIndex(fav => fav.title === storyTitle);
+            const index = favorites.findIndex(fav => fav.filename === filename);
             
             if (index === -1) {
                 favorites.push(story);
-                showToast(`تمت إضافة "${storyTitle}" إلى المفضلة`);
+                showToast(`تمت إضافة "${story.title}" إلى المفضلة`);
             } else {
                 favorites.splice(index, 1);
-                showToast(`تمت إزالة "${storyTitle}" من المفضلة`);
+                showToast(`تمت إزالة "${story.title}" من المفضلة`);
             }
             
             localStorage.setItem('favorites', JSON.stringify(favorites));
@@ -681,7 +674,6 @@
             if (searchQuery) {
                 filteredStories = filteredStories.filter(story => 
                     story.title.toLowerCase().includes(searchQuery) ||
-                    story.author.toLowerCase().includes(searchQuery) ||
                     story.genre.some(g => g.toLowerCase().includes(searchQuery))
                 );
             }
@@ -774,4 +766,4 @@
         });
     </script>
 </body>
-</html>
+    </html>
